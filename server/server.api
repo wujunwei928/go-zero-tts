@@ -8,8 +8,46 @@ type Response {
 	Message string `json:"message"`
 }
 
+type (
+	ListVoicesRequest {
+		Platform string `path:"platform"`
+	}
+	Voice {
+		Name               string   `json:"name"`
+		ShortName          string   `json:"shortName"`
+		Gender             string   `json:"gender"`
+		Locale             string   `json:"locale"`
+		FriendlyName       string   `json:"friendlyName"`
+		ContentCategories  []string `json:"contentCategories"`
+		VoicePersonalities []string `json:"voicePersonalities"`
+	}
+	ListVoicesResponse {
+		Voices []*Voice `json:"voices"`
+	}
+)
+
+type (
+	TextToSpeechRequest {
+		Text     string `json:"text"`
+		Voice    string `json:"voice"`
+		Platform string `json:"platform"`
+	}
+	TextToSpeechResponse {
+		Audio []byte `json:"audio"`
+	}
+)
+
+@server (
+	timeout: 2000ms
+)
 service server-api {
 	@handler ServerHandler
 	get /from/:name (Request) returns (Response)
+
+	@handler ListVoicesHandler
+	get /list-voices/:platform (ListVoicesRequest) returns (ListVoicesResponse)
+
+	@handler TextToSpeechHandler
+	post /text-to-speech (TextToSpeechRequest) returns (TextToSpeechResponse)
 }
 

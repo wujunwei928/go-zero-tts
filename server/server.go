@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-
 	"server/internal/config"
 	"server/internal/handler"
 	"server/internal/svc"
@@ -22,6 +21,12 @@ func main() {
 
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()
+
+	// 使用自定义cors中间件
+	//server.Use(middleware.NewCorsMiddleware().Handle)
+	// 使用go-zero提供的cors中间件
+	opt := rest.WithCors("localhost", "http://127.0.0.1:3000")
+	opt(server)
 
 	ctx := svc.NewServiceContext(c)
 	handler.RegisterHandlers(server, ctx)

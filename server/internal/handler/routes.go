@@ -3,6 +3,7 @@ package handler
 
 import (
 	"net/http"
+	"time"
 
 	"server/internal/svc"
 
@@ -17,6 +18,17 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/from/:name",
 				Handler: ServerHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/list-voices/:platform",
+				Handler: ListVoicesHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/text-to-speech",
+				Handler: TextToSpeechHandler(serverCtx),
+			},
 		},
+		rest.WithTimeout(2000*time.Millisecond),
 	)
 }

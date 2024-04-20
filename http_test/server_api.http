@@ -1,0 +1,13 @@
+### 获取声音列表
+GET http://localhost:8888/list-voices/edge-tts
+Accept: application/json
+
+### 生成声音
+POST http://localhost:8888/text-to-speech
+Content-Type: application/json
+
+{
+  "platform": "edge-tts",
+  "voice": "zh-CN-YunjianNeural",
+  "text": "纵使浮云终日不雨，纵使春风十里，不如你。"
+}
