@@ -38,7 +38,7 @@ type (
 )
 
 @server (
-	timeout: 2000ms
+	timeout: 10000ms
 )
 service server-api {
 	@handler ServerHandler
