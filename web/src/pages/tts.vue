@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-autocomplete
       v-model="selectVoice"
-      :items="voliceList"
+      :items="voiceList"
       item-title="shortName"
       item-value="shortName"
       label="选择声音"
@@ -92,7 +92,7 @@
 
   <v-container fluid>
     <v-btn
-      @click="textToSpeech"
+      @click="textToSpeechApi"
       rounded="xl"
       size="x-large"
       block
@@ -105,93 +105,88 @@
           Your browser does not support the audio element.
     </audio>
   </v-container>
+
+  <!-- 错误信息 -->
+  <v-alert
+   type="error"
+   v-show="submitError"
+  >
+    {{ submitErrorMessage }}
+  </v-alert>
 </template>
 
-<script>
-  import { defineComponent } from 'vue'
+<script setup>
+  import { ref, computed, onMounted } from 'vue'
   import axios from 'axios'
+  import { useLocalStorage } from '@vueuse/core';
+  import { getVoiceList, textToSpeech } from '@/api/tts';
 
-  export default defineComponent({
-    data() {
-      return {
-        pitch: 1,
-        rate: 1,
-        volume: 1,
-        inputText: "白日依山尽,黄河入海流.欲穷千里目,更上一层楼.", //白日依山尽,黄河入海流.欲穷千里目,更上一层楼.
-        selectVoice: {},
-        voliceList: [],
-        mp3ContainerDisplay: "none",
-        mp3Url: ""
+  let pitch = ref(1)
+  let rate = ref(1)
+  let volume = ref(1)
+  let inputText = ref("白日依山尽,黄河入海流.欲穷千里目,更上一层楼.")
+  let selectVoice = ref(undefined)
+  let mp3ContainerDisplay = ref("none")
+  let mp3Url = ref("")
+  let submitError = ref(false)
+  let submitErrorMessage = ref("")
+  // 使用useLocalStorage获取或初始化声音列表
+  let voiceList = useLocalStorage('voiceList', [])
+  
+
+  const textToSpeechApi = async () => {
+    try {
+      submitError.value = false
+      submitErrorMessage.value = ""
+
+      if (selectVoice.value === undefined) {
+        submitError.value = true
+        submitErrorMessage.value = "请选择声音"
+        return
       }
-    },
+      
+      const platform = "edge-tts"
+      const voice = selectVoice.value.shortName
+      const text = inputText.value
+      const response = await textToSpeech(platform, voice, text)
+      
+      // 将 base64 编码的音频数据解码成二进制数据
+      let binaryAudioData = atob(response.data.audio);
 
-    methods: {
-      textToSpeech() {
-        this.mp3ContainerDisplay = "none";
-        this.mp3Url = "";
+      // 将二进制数据转换成 Uint8Array
+      let byteArray = new Uint8Array(binaryAudioData.length);
+      for (let i = 0; i < binaryAudioData.length; i++) {
+          byteArray[i] = binaryAudioData.charCodeAt(i);
+      }
 
-        const selectVoice = this.selectVoice;
-        const inputText = this.inputText;
-        console.log(selectVoice)
-        console.log(inputText)
-        const postData = {
-          platform: "edge-tts",
-          voice: this.selectVoice.shortName,
-          text: this.inputText,
-        }
+      // 创建 Blob 对象
+      let blob = new Blob([byteArray], { type: 'audio/mpeg' });
 
-        axios.post(
-          'http://localhost:8888/text-to-speech',
-          postData,
-          {
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            timeout: 10000,
-          }
-        )
-        .then(response => {
-          // this.voliceList = response.data["voices"]
-          // this.selectVoice = this.voliceList[0]
-          
-          // 将 base64 编码的音频数据解码成二进制数据
-          let binaryAudioData = atob(response.data.audio);
+      // 创建 URL 对象
+      let audioURL = URL.createObjectURL(blob);
 
-          // 将二进制数据转换成 Uint8Array
-          let byteArray = new Uint8Array(binaryAudioData.length);
-          for (let i = 0; i < binaryAudioData.length; i++) {
-              byteArray[i] = binaryAudioData.charCodeAt(i);
-          }
+      // 将音频文件 URL 赋给 audio 元素的 src 属性
+      mp3Url.value = audioURL;
+      mp3ContainerDisplay.value = "block";
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
-          // 创建 Blob 对象
-          let blob = new Blob([byteArray], { type: 'audio/mpeg' });
-
-          // 创建 URL 对象
-          let audioURL = URL.createObjectURL(blob);
-
-          // 将音频文件 URL 赋给 audio 元素的 src 属性
-          this.mp3Url = audioURL;
-          this.mp3ContainerDisplay = "block";
-        })
-        .catch(error => {
-          console.log(error)
-        })
-      },
-    },
-
-    mounted() {
-      axios.get('http://localhost:8888/list-voices/edge-tts', {
-        withCredentials: true,  // 后端设置 Access-Control-Allow-Origin 为 * 时，前端不能设置 withCredentials
-        timeout: 2000,
-      })
-        .then(response => {
-          this.voliceList = response.data["voices"]
-          this.selectVoice = this.voliceList[0]
-          console.log(response.data)
-        })
-        .catch(error => {
-          console.log(error)
-        })
+  const getVoiceListApi = async () => {
+    try {
+      const response = await getVoiceList("edge-tts")
+      voiceList.value = response.data["voices"]
+      selectVoice.value = voiceList.value[0]
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  onMounted(() => {
+    // 当组件挂载时检查localStorage，如果没有声音列表则发起请求
+    if (voiceList.value.length === 0) {
+      getVoiceListApi()
     }
   })
+
 </script>

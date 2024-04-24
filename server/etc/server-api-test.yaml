@@ -1,7 +1,7 @@
 Name: server-api
 Host: 0.0.0.0
 Port: 8888
-Mode: dev
+Mode: test
 
 CorsOriginList:
   - "http://127.0.0.1:3000"

@@ -38,6 +38,7 @@ type (
 )
 
 @server (
+	prefix:  /api
 	timeout: 10000ms
 )
 service server-api {

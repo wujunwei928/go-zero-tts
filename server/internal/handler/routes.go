@@ -29,6 +29,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: TextToSpeechHandler(serverCtx),
 			},
 		},
+		rest.WithPrefix("/api"),
 		rest.WithTimeout(10000*time.Millisecond),
 	)
 }

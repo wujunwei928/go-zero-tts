@@ -25,7 +25,7 @@ func main() {
 	// 使用自定义cors中间件
 	//server.Use(middleware.NewCorsMiddleware().Handle)
 	// 使用go-zero提供的cors中间件
-	opt := rest.WithCors("localhost", "http://127.0.0.1:3000")
+	opt := rest.WithCors(c.CorsOriginList...)
 	opt(server)
 
 	ctx := svc.NewServiceContext(c)
