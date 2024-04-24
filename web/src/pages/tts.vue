@@ -15,11 +15,11 @@
       <v-card-text>
         <v-slider
           v-model="volume"
-          :min="0.5"
-          :max="2"
+          :min="0.1"
+          :max="3"
           :step="0.1"
           class="ma-4"
-          label="音高"
+          label="音量"
           hide-details
         >
           <template v-slot:append>
@@ -37,11 +37,11 @@
 
         <v-slider
           v-model="pitch"
-          :min="0.5"
-          :max="2"
+          :min="0.1"
+          :max="3"
           :step="0.1"
           class="ma-4"
-          label="语速"
+          label="音高"
           hide-details
         >
           <template v-slot:append>
@@ -59,11 +59,11 @@
 
         <v-slider
           v-model="rate"
-          :min="0.5"
-          :max="2"
+          :min="0.1"
+          :max="3"
           :step="0.1"
           class="ma-4"
-          label="音量"
+          label="语速"
           hide-details
         >
           <template v-slot:append>
@@ -148,7 +148,11 @@
       const platform = "edge-tts"
       const voice = selectVoice.value.shortName
       const text = inputText.value
-      const response = await textToSpeech(platform, voice, text)
+      const volumeValue = parseFloat(volume.value)
+      const pitchValue = parseFloat(pitch.value)
+      const rateValue = parseFloat(rate.value)
+
+      const response = await textToSpeech(platform, voice, text, volumeValue, pitchValue, rateValue)
       
       // 将 base64 编码的音频数据解码成二进制数据
       let binaryAudioData = atob(response.data.audio);
@@ -169,7 +173,8 @@
       mp3Url.value = audioURL;
       mp3ContainerDisplay.value = "block";
     } catch (error) {
-      console.log(error)
+      submitError.value = true
+      submitErrorMessage.value = error.response.data
     }
   }
 
