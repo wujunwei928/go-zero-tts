@@ -15,11 +15,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodGet,
-				Path:    "/from/:name",
-				Handler: ServerHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
 				Path:    "/list-voices/:platform",
 				Handler: ListVoicesHandler(serverCtx),
 			},

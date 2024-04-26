@@ -1,13 +1,5 @@
 syntax = "v1"
 
-type Request {
-	Name string `path:"name,options=you|me"`
-}
-
-type Response {
-	Message string `json:"message"`
-}
-
 type (
 	ListVoicesRequest {
 		Platform string `path:"platform"`
@@ -45,9 +37,6 @@ type (
 	timeout: 10000ms
 )
 service server-api {
-	@handler ServerHandler
-	get /from/:name (Request) returns (Response)
-
 	@handler ListVoicesHandler
 	get /list-voices/:platform (ListVoicesRequest) returns (ListVoicesResponse)
 

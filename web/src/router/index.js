@@ -16,16 +16,6 @@ const router = createRouter({
       name: 'Home',
       component: () => import('@/pages/index.vue'),
     },
-    {
-      path: '/tts',
-      name: 'tts',
-      component: () => import('@/pages/tts.vue'),
-    },
-    // {
-    //   path: '/:pathMatch(.*)*',
-    //   name: 'NotFound',
-    //   component: () => import('@/pages/NotFound.vue'),
-    // },
   ],
 })
 
