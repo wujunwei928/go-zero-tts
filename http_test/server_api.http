@@ -1,9 +1,9 @@
 ### 获取声音列表
-GET http://localhost:8888/list-voices/edge-tts
+GET http://localhost:8888/api/list-voices/edge-tts
 Accept: application/json
 
 ### 生成声音
-POST http://localhost:8888/text-to-speech
+POST http://localhost:8888//api/text-to-speech
 Content-Type: application/json
 
 {

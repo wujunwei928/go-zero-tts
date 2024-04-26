@@ -13,9 +13,9 @@ type TextToSpeechRequest struct {
 	Text     string  `json:"text"`
 	Voice    string  `json:"voice"`
 	Platform string  `json:"platform"`
-	Volume   float64 `json:"volume"`
-	Pitch    float64 `json:"pitch"`
-	Rate     float64 `json:"rate"`
+	Volume   float64 `json:"volume,default=1"`
+	Pitch    float64 `json:"pitch,default=1"`
+	Rate     float64 `json:"rate,default=1"`
 }
 
 type TextToSpeechResponse struct {
