@@ -1,11 +1,11 @@
 <template>
   <v-container fluid>
     <v-autocomplete
-      v-model="selectCountry"
-      :items="countryList"
+      v-model="selectLocale"
+      :items="localeList"
       item-title="displayName"
       item-value="shortName"
-      label="选择国家"
+      label="选择地区"
       @update:model-value="changeCountry($event)"
       v-com
       return-object
@@ -143,10 +143,10 @@
   // 使用useLocalStorage获取或初始化声音列表
   let voiceList = useLocalStorage('voiceList', [])
   let countryVoicesMap = ref({})
-  // 选择国家和声音
-  let selectCountry = ref(undefined)
+  // 选择地区和声音
+  let selectLocale = ref(undefined)
   let selectVoice = ref(undefined)
-  let countryList = ref([])
+  let localeList = ref([])
   let countryVoiceList = ref([])
   
 
@@ -203,16 +203,16 @@
     doChangeCountry(event.shortName)
   }
 
-  // 切换国家时触发
+  // 切换地区时触发
   const doChangeCountry = (country) => {
-    // 默认选择 shortName 为 zh-CN 的国家
-    selectCountry.value = {
+    // 默认选择 shortName 为 zh-CN 的地区
+    selectLocale.value = {
       displayName: cnLocalLanguage[country],
       shortName: country
     }
 
-    // 获取国家对应的声音列表
-    countryVoiceList.value = countryVoicesMap.value[selectCountry.value.shortName].map((item) => {
+    // 获取地区对应的声音列表
+    countryVoiceList.value = countryVoicesMap.value[selectLocale.value.shortName].map((item) => {
       return {
         displayName: cnLocalVoice[item.shortName],
         shortName: item.shortName
@@ -237,7 +237,7 @@
       getVoiceListApi()
     }
 
-    // 将声音列表按国家分类
+    // 将声音列表按地区分类
     countryVoicesMap.value = voiceList.value.reduce((acc, cur) => {
       if (cur.locale in acc) {
         acc[cur.locale].push(cur)
@@ -247,8 +247,8 @@
       return acc
     }, {})
 
-    // 获取声音国家列表, 获取 countryVoicesMap 的key
-    countryList.value = Object.keys(countryVoicesMap.value).map((item) => {
+    // 获取声音地区列表, 获取 countryVoicesMap 的key
+    localeList.value = Object.keys(countryVoicesMap.value).map((item) => {
       return {
         displayName: cnLocalLanguage[item],
         shortName: item
