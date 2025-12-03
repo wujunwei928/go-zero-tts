@@ -85,6 +85,8 @@ github.com/wujunwei928/edge-tts-go v0.0.0-20240419061855-72981a89f6e3 h1:imiknAh
 github.com/wujunwei928/edge-tts-go v0.0.0-20240419061855-72981a89f6e3/go.mod h1:4dpkYsGVS716Dz2bA9ZLqHvF8Fx5t5WKrHpeCEtf094=
 github.com/wujunwei928/edge-tts-go v0.0.0-20240424094733-e27b6047fdcd h1:PF2F5OPLAu3yP4A2AtUfpt+ZVwTn2JbU3gJVbEm6rLI=
 github.com/wujunwei928/edge-tts-go v0.0.0-20240424094733-e27b6047fdcd/go.mod h1:4dpkYsGVS716Dz2bA9ZLqHvF8Fx5t5WKrHpeCEtf094=
+github.com/wujunwei928/edge-tts-go v0.0.0-20250315123430-d4675babeb96 h1:/iH07S9xU9GPGg2pzmHOe/0kw5UD8L/oVbje5AzU1l0=
+github.com/wujunwei928/edge-tts-go v0.0.0-20250315123430-d4675babeb96/go.mod h1:4dpkYsGVS716Dz2bA9ZLqHvF8Fx5t5WKrHpeCEtf094=
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
 github.com/zeromicro/go-zero v1.6.4 h1:GvZXxxwl1Lby/gIHxHwN/ZNmXl1WFJa1DvoVgqgttUs=
 github.com/zeromicro/go-zero v1.6.4/go.mod h1:dQ39Zoz20/6x/SUhFXyEEg8lWjl+CO3dzg8Je2xG63Q=
